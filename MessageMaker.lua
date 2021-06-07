@@ -1,13 +1,18 @@
 local label = {}
 
 label.Create = function(data)
+    coroutine.resume((coroutine.create(function()
     if typeof(data) ~= 'table' then
         data = {}
+    end
+    if game.CoreGui:FindFirstChild("MESSAGEMAKER") then
+        game.CoreGui.MESSAGEMAKER:Destroy()
     end
     local primary = data.PrimaryColor or Color3.fromRGB(45, 45, 45)
     local secondary = data.SecondaryColor or Color3.fromRGB(255, 0, 0)
     local texts = (typeof(data.Texts) == 'table') and data.Texts or {{Text = "sup", Delay = 2}}
     local GUI = Instance.new("ScreenGui", game.CoreGui)
+    GUI.Name = "MESSAGEMAKER"
     wait(0.9)
     local Frame1 = Instance.new("Frame", GUI)
     Frame1.Name = "MainFrame"
@@ -50,6 +55,7 @@ label.Create = function(data)
         wait()
     end
     GUI:Destroy()
+    end)))
 end
 
 return label
