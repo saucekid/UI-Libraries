@@ -4,8 +4,8 @@ label.Create = function(data)
     if typeof(data) ~= 'table' then
         data = {}
     end
-    local primary = (typeof(data.PrimaryColor) == 'userdata') and data.PrimaryColor or Color3.fromRGB(45, 45, 45)
-    local secondary = (typeof(data.SecondaryColor) == 'userdata') and data.SecondaryColor or Color3.fromRGB(255, 0, 0)
+    local primary = data.PrimaryColor or Color3.fromRGB(45, 45, 45)
+    local secondary = data.SecondaryColor or Color3.fromRGB(255, 0, 0)
     local texts = (typeof(data.Texts) == 'table') and data.Texts or {{Text = "sup", Delay = 2}}
     local GUI = Instance.new("ScreenGui", game.CoreGui)
     wait(0.9)
