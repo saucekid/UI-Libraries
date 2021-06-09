@@ -231,7 +231,7 @@ function boxBase:Update()
             self.Components.Distance.Visible = true
             self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 14)
             if self.Player then
-                self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").Health).. "%]"
+                self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(math.round(self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").Health)).. "%]"
             else
                 self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
             end
