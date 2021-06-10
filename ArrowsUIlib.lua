@@ -145,7 +145,7 @@ local function GetNewYCoord()
     return y
 end
 
-local selected = 1
+local selected = 2
 local n = #_G["Layout"]
 
 local Library = {}
@@ -156,8 +156,9 @@ function Library:UpdateTheme()
             if v["Type"] == "Category" then
                 v["Drawings"]["Main"].Color = _G["Theme"]["Category_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Category_Back_Transparency"]
-                --v["Drawings"]["Text"].Color = _G["Theme"]["Selected_Color"]
+                v["Drawings"]["Text"].Color = _G["Theme"]["Selected_Color"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
+                v["Drawings"]["Text"].Text = ">".. v["Drawings"]["Text"].Text
             else
                 v["Drawings"]["Main"].Color = _G["Theme"]["Option_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
@@ -176,8 +177,9 @@ function Library:UpdateTheme()
             if v["Type"] == "Category" then
                 v["Drawings"]["Main"].Color = _G["Theme"]["Category_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Category_Back_Transparency"]
-                --v["Drawings"]["Text"].Color = _G["Theme"]["Category_Text"]
+                v["Drawings"]["Text"].Color = _G["Theme"]["Category_Text"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
+                v["Drawings"]["Extra"]["Text"].Text = ">".. v["Drawings"]["Text"].Text
             else
                 v["Drawings"]["Main"].Color = _G["Theme"]["Option_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
@@ -397,11 +399,11 @@ local c
 c = UIS.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.Keyboard then
         if input.KeyCode == Enum.KeyCode.Down then
-            selected = clamp(selected + 1, 1, n)
+            selected = clamp(selected + 1, 2, n)
             Library:Reset()
         end
         if input.KeyCode == Enum.KeyCode.Up then
-            selected = clamp(selected - 1, 1, n)
+            selected = clamp(selected - 1, 2, n)
             Library:Reset()
         end
         if input.KeyCode == Enum.KeyCode.Right then
