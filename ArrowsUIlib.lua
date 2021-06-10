@@ -156,36 +156,40 @@ function Library:UpdateTheme()
             if v["Type"] == "Category" then
                 v["Drawings"]["Main"].Color = _G["Theme"]["Category_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Category_Back_Transparency"]
-                v["Drawings"]["Text"].Color = _G["Theme"]["Selected_Color"]
+                --v["Drawings"]["Text"].Color = _G["Theme"]["Selected_Color"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
             else
                 v["Drawings"]["Main"].Color = _G["Theme"]["Option_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                 v["Drawings"]["Text"].Color = _G["Theme"]["Selected_Color"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
+                v["Drawings"]["Text"].Text = ">".. v["Drawings"]["Text"].Text
                 if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Colorpicker" then
                     v["Drawings"]["Extra"]["Main"].Color = _G["Theme"]["Option_Back"]
                     v["Drawings"]["Extra"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                     v["Drawings"]["Extra"]["Text"].Color = _G["Theme"]["Selected_Color"]
                     v["Drawings"]["Extra"]["Text"].Size = _G["Theme"]["Text_Size"]
+                    v["Drawings"]["Extra"]["Text"].Text = ">".. v["Drawings"]["Text"].Text
                 end
             end
         else
             if v["Type"] == "Category" then
                 v["Drawings"]["Main"].Color = _G["Theme"]["Category_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Category_Back_Transparency"]
-                v["Drawings"]["Text"].Color = _G["Theme"]["Category_Text"]
+                --v["Drawings"]["Text"].Color = _G["Theme"]["Category_Text"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
             else
                 v["Drawings"]["Main"].Color = _G["Theme"]["Option_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                 v["Drawings"]["Text"].Color = _G["Theme"]["Option_Text"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
+                v["Drawings"]["Text"].Text = v["Drawings"]["Text"].Text:sub(2)
                 if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Colorpicker" then
                     v["Drawings"]["Extra"]["Main"].Color = _G["Theme"]["Option_Back"]
                     v["Drawings"]["Extra"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                     v["Drawings"]["Extra"]["Text"].Color = _G["Theme"]["Option_Text"]
                     v["Drawings"]["Extra"]["Text"].Size = _G["Theme"]["Text_Size"]
+                    v["Drawings"]["Extra"]["Text"].Text = v["Drawings"]["Extra"]["Text"].Text:sub(2)
                 end
             end
         end
@@ -508,12 +512,12 @@ spawn(function()
     end
 end)
 
-function Library:NewCategory(cat_name)
+function Library:NewCategory(cat_name, color)
     local val = #_G["Layout"]+1
     local new_y = GetNewYCoord()
     _G["Layout"][val] = {
         ["Type"] = "Category",
-        ["Drawings"] = CreateTextBox(cat_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X, new_y), {Type = "Category"})
+        ["Drawings"] = CreateTextBox(cat_name, RGB(10, 10, 10), 0.75, color or _G["Theme"]["Category_Text"], _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X, new_y), {Type = "Category"})
     }
     Library:Reset()
 
