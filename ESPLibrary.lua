@@ -12,6 +12,7 @@ local ESP = {
     AttachShift = 1,
     TeamMates = true,
     Players = true,
+    Health = true,
     
     Objects = setmetatable({}, {__mode="kv"}),
     Overrides = {}
@@ -230,10 +231,14 @@ function boxBase:Update()
             
             self.Components.Distance.Visible = true
             self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 14)
-            if self.Player then
+            if self.Player and ESP.Health then
                 self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(math.round(self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").Health)).. "%]"
             else
-                self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
+                if not self.Player and self.PrimaryPart.Parent:FindFirstChild("Health") then 
+                    self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(math.round(self.PrimaryPart.Parent.Health.Value)).. "%]"
+                elseif self.Player then
+                    self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
+                end
             end
             self.Components.Distance.Color = Color3.fromRGB(255,255,255)
         else
