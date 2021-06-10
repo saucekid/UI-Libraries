@@ -236,7 +236,7 @@ function boxBase:Update()
             else
                 if not self.Player and self.PrimaryPart.Parent:FindFirstChild("Health") then 
                     self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(math.round(self.PrimaryPart.Parent.Health.Value)).. "%]"
-                elseif self.Player then
+                else
                     self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
                 end
             end
