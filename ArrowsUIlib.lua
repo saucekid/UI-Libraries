@@ -145,7 +145,7 @@ local function GetNewYCoord()
     return y
 end
 
-local selected = 3
+local selected = 2
 local n = #_G["Layout"]
 
 local Library = {}
@@ -156,7 +156,7 @@ function Library:UpdateTheme()
             if v["Type"] == "Category" then
                 v["Drawings"]["Main"].Color = _G["Theme"]["Category_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Category_Back_Transparency"]
-                v["Drawings"]["Text"].Color = _G["Theme"]["Selected_Color"]
+                --v["Drawings"]["Text"].Color = _G["Theme"]["Selected_Color"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
                 --v["Drawings"]["Text"].Text = ">".. v["Drawings"]["Text"].Text
             else
@@ -164,20 +164,20 @@ function Library:UpdateTheme()
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                 v["Drawings"]["Text"].Color = _G["Theme"]["Selected_Color"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
-                --v["Drawings"]["Text"].Text = ">".. v["Drawings"]["Text"].Text
+                v["Drawings"]["Text"].Text = ">".. v["Drawings"]["Text"].Text
                 if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Colorpicker" then
                     v["Drawings"]["Extra"]["Main"].Color = _G["Theme"]["Option_Back"]
                     v["Drawings"]["Extra"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                     v["Drawings"]["Extra"]["Text"].Color = _G["Theme"]["Selected_Color"]
                     v["Drawings"]["Extra"]["Text"].Size = _G["Theme"]["Text_Size"]
-                    --v["Drawings"]["Extra"]["Text"].Text = ">".. v["Drawings"]["Text"].Text
+                    v["Drawings"]["Extra"]["Text"].Text = ">".. v["Drawings"]["Text"].Text
                 end
             end
         else
             if v["Type"] == "Category" then
                 v["Drawings"]["Main"].Color = _G["Theme"]["Category_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Category_Back_Transparency"]
-                v["Drawings"]["Text"].Color = _G["Theme"]["Category_Text"]
+                --v["Drawings"]["Text"].Color = _G["Theme"]["Category_Text"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
                 --v["Drawings"]["Text"].Text = v["Drawings"]["Text"].Text:sub(2)
             else
@@ -185,13 +185,13 @@ function Library:UpdateTheme()
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                 v["Drawings"]["Text"].Color = _G["Theme"]["Option_Text"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
-                --v["Drawings"]["Text"].Text = v["Drawings"]["Text"].Text:sub(2)
+                v["Drawings"]["Text"].Text = v["Drawings"]["Text"].Text:sub(2)
                 if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Colorpicker" then
                     v["Drawings"]["Extra"]["Main"].Color = _G["Theme"]["Option_Back"]
                     v["Drawings"]["Extra"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                     v["Drawings"]["Extra"]["Text"].Color = _G["Theme"]["Option_Text"]
                     v["Drawings"]["Extra"]["Text"].Size = _G["Theme"]["Text_Size"]
-                    --v["Drawings"]["Extra"]["Text"].Text = v["Drawings"]["Extra"]["Text"].Text:sub(2)
+                    v["Drawings"]["Extra"]["Text"].Text = v["Drawings"]["Extra"]["Text"].Text:sub(2)
                 end
             end
         end
