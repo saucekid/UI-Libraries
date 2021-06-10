@@ -145,7 +145,7 @@ local function GetNewYCoord()
     return y
 end
 
-local selected = 2
+local selected = 3
 local n = #_G["Layout"]
 
 local Library = {}
