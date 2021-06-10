@@ -145,7 +145,7 @@ local function GetNewYCoord()
     return y
 end
 
-local selected = 2
+local selected = 3
 local n = #_G["Layout"]
 
 local Library = {}
@@ -501,7 +501,7 @@ c = UIS.InputBegan:Connect(function(input)
                 end
             end
         end
-        if input.KeyCode == Enum.KeyCode.End then
+        if input.KeyCode == Enum.KeyCode.RightShift then
             Library:Toggle()
         end
     end
