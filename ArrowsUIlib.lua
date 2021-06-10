@@ -179,7 +179,7 @@ function Library:UpdateTheme()
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Category_Back_Transparency"]
                 v["Drawings"]["Text"].Color = _G["Theme"]["Category_Text"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
-                v["Drawings"]["Extra"]["Text"].Text = ">".. v["Drawings"]["Text"].Text
+                v["Drawings"]["Text"].Text = v["Drawings"]["Text"].Text:sub(2)
             else
                 v["Drawings"]["Main"].Color = _G["Theme"]["Option_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
