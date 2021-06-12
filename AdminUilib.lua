@@ -184,6 +184,7 @@ admin.New = function(data)
                 BackgroundTransparency = 1,
                 BorderSizePixel = 0,
                 ScrollBarThickness = 5,
+		CanvasSize = udim2(0,0,0,1000),
                 ScrollBarImageTransparency = 1,
                 ScrollBarImageColor3 = theme.ScrollBarColor,
                 Size = udim2(1, -12, 1, -12),
