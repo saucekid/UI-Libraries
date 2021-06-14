@@ -19,11 +19,13 @@ end
 
 local rig = {}
 function rig.create(rigtype, parent)
-    rig = rigtype or "R15"
-    if workspace:FindFirstChild("FakeCharacter") then
-        workspace.FakeCharacter:Destroy()
+    rigt = rigtype or "R15"
+    parentt = parent or workspace
+    
+    if parentt:FindFirstChild("FakeCharacter") then
+         parentt.FakeCharacter:Destroy()
     end
-    if rig == "R15" then
+    if rigt == "R15" then
         cors = {}
         mas = Instance.new("Model", game:GetService("Lighting"))
         Model0 = Instance.new("Model")
@@ -1193,7 +1195,7 @@ function rig.create(rigtype, parent)
         BodyColors84.TorsoColor3 = Color3.new(0.0509804, 0.411765, 0.67451)
 
         for i, v in pairs(mas:GetChildren()) do
-            v.Parent = parent or workspace
+            v.Parent = parentt
             pcall(
                 function()
                     v:MakeJoints()
@@ -1208,7 +1210,6 @@ function rig.create(rigtype, parent)
                 end
             )
         end
-        return mas.FakeCharacter
     end
 end
 
