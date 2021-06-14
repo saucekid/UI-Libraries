@@ -21,7 +21,7 @@ local rig = {}
 function rig.create(rigtype, parent)
     rig = rigtype or "R15"
     if workspace:FindFirstChild("FakeCharacter") then
-        then workspace.FakeCharacter:Destroy()
+        workspace.FakeCharacter:Destroy()
     end
     if rig == "R15" then
         cors = {}
