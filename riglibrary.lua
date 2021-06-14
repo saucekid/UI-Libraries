@@ -19,9 +19,10 @@ end
 
 local rig = {}
 function rig.create(rigtype, parent)
+    local fakechar
     rigt = rigtype or "R15"
     parentt = parent or workspace
-    
+
     if parentt:FindFirstChild("FakeCharacter") then
          parentt.FakeCharacter:Destroy()
     end
@@ -1195,6 +1196,7 @@ function rig.create(rigtype, parent)
         BodyColors84.TorsoColor3 = Color3.new(0.0509804, 0.411765, 0.67451)
 
         for i, v in pairs(mas:GetChildren()) do
+            fakechar = v
             v.Parent = parentt
             pcall(
                 function()
@@ -1211,6 +1213,7 @@ function rig.create(rigtype, parent)
             )
         end
     end
+    return fakechar
 end
 
 return rig
