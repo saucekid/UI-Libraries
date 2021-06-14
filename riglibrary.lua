@@ -1208,6 +1208,7 @@ function rig.create(rigtype, parent)
                 end
             )
         end
+        return mas.FakeCharacter
     end
 end
 
