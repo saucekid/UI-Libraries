@@ -1146,7 +1146,11 @@ library.newtoggle = function(info)
 	local buttonframe = instance.new("Frame")
 	buttonframe.Size = udim2.snew(0,12,0,12,info.section)
 	buttonframe.Position = udim2.pnew(0.1,-(buttonframe.Size.x/2+1),0,y,info.section)
-	buttonframe.Color = Color3.fromRGB(20, 20, 20)
+	if info.def then
+		buttonframe.Color = Color3.fromRGB(45, 45, 45)
+	else
+		buttonframe.Color = Color3.fromRGB(20, 20, 20)
+	end
 	buttonframe.Visible = open
 	--
 	border1.Size = udim2.snew(1,6,1,6,buttonframe)
@@ -2308,12 +2312,5 @@ rs.RenderStepped:Connect(function()
 	end
 end)
 
-for i,v in pairs(toggles) do
-    if v.enabled then
-	    v.button.Color = Color3.fromRGB(20,20,20)
-	else
-	    v.button.Color = Color3.fromRGB(45,45,45)
-    end
-end
 --
 return library
