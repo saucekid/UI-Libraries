@@ -1146,7 +1146,7 @@ library.newtoggle = function(info)
 	local buttonframe = instance.new("Frame")
 	buttonframe.Size = udim2.snew(0,12,0,12,info.section)
 	buttonframe.Position = udim2.pnew(0.1,-(buttonframe.Size.x/2+1),0,y,info.section)
-	if info.def then
+	if info.def == true then
 		buttonframe.Color = Color3.fromRGB(45, 45, 45)
 	else
 		buttonframe.Color = Color3.fromRGB(20, 20, 20)
