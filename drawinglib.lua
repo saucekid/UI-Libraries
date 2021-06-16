@@ -2307,5 +2307,13 @@ rs.RenderStepped:Connect(function()
 		cursor.Visible = false
 	end
 end)
+
+for i,v in pairs(toggles) do
+    if v.enabled then
+	    v.button.Color = Color3.fromRGB(20,20,20)
+	else
+	    v.button.Color = Color3.fromRGB(45,45,45)
+    end
+end
 --
 return library
