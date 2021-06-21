@@ -13,6 +13,7 @@ local ESP = {
     TeamMates = true,
     Players = true,
     Health = true,
+    PrimaryPart = "HumanoidRootPart",
     
     Objects = setmetatable({}, {__mode="kv"}),
     Overrides = {}
@@ -278,7 +279,7 @@ function ESP:Add(obj, options)
         Size = options.Size or self.BoxSize,
         Object = obj,
         Player = options.Player or plrs:GetPlayerFromCharacter(obj),
-        PrimaryPart = options.PrimaryPart or obj.ClassName == "Model" and (obj.PrimaryPart or obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChildWhichIsA("BasePart")) or obj:IsA("BasePart") and obj,
+        PrimaryPart = options.PrimaryPart or obj.ClassName == "Model" and obj:FindFirstChild(ESP.PrimaryPart) or (obj.PrimaryPart or obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChildWhichIsA("BasePart")) or obj:IsA("BasePart") and obj,
         Components = {},
         IsEnabled = options.IsEnabled,
         Temporary = options.Temporary,
