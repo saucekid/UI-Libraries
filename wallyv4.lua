@@ -278,7 +278,7 @@ function Library:Window(Name, Color, SizeY)
             SectionTitle.Size = UDim2.new(0, 178, 0, 12)
             SectionTitle.Font = Enum.Font.Code
             SectionTitle.Text = Name
-            SectionTitle.TextColor3 = Color3.new(1, 1, 1)
+            SectionTitle.TextColor3 = getgenv().WindowThemeColor
             SectionTitle.TextSize = 14
             SectionTitle.TextStrokeTransparency = 0.4
             SectionTitle.TextXAlignment = Enum.TextXAlignment.Left
