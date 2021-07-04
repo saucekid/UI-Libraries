@@ -1878,7 +1878,6 @@ function library:CreateWindow(name, size, hidebutton)
             return sector
         end
 
-        --[[ not finished lol
         function tab:CreatePlayerlist(name)
             local list = { }
             list.name = name or ""
@@ -1995,7 +1994,7 @@ function library:CreateWindow(name, size, hidebutton)
             
             return list
         end
-        ]]--
+
 
         table.insert(window.Tabs, tab)
         return tab
