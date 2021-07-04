@@ -15,6 +15,7 @@ local ESP = {
     Health = true,
     PrimaryPart = "HumanoidRootPart",
     
+    PlayerList = {}
     Objects = setmetatable({}, {__mode="kv"}),
     Overrides = {}
 }
@@ -339,7 +340,7 @@ function ESP:Add(obj, options)
             if ESP.AutoRemove ~= false then
                 box:Remove()
             end
-		end)
+	end)
     end
 
     return box
