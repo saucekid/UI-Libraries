@@ -238,6 +238,8 @@ function boxBase:Update()
                     self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(math.round(self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").Health)).. "%]"
                 elseif self.PrimaryPart.Parent:FindFirstChild("Health") then 
                     self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(math.round(self.PrimaryPart.Parent.Health.Value)).. "%]"
+		else
+		    self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
                 end
             else
                 self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
