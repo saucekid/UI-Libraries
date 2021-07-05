@@ -9,6 +9,7 @@ local ESP = {
     Names = true,
     TeamColor = true,
     Thickness = 2,
+    Font = 3,
     AttachShift = 1,
     TeamMates = true,
     Players = true,
@@ -229,17 +230,19 @@ function boxBase:Update()
             self.Components.Name.Visible = true
             self.Components.Name.Position = Vector2.new(TagPos.X, TagPos.Y)
             self.Components.Name.Text = self.Name
+            self.Components.Name.Font = ESP.Font
             self.Components.Name.Color = color
             
             self.Components.Distance.Visible = true
+            self.Components.Distance.Font = ESP.Font
             self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 14)
             if ESP.Health then
                 if self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid") then 
                     self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(math.round(self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").Health)).. "%]"
                 elseif self.PrimaryPart.Parent:FindFirstChild("Health") then 
                     self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(math.round(self.PrimaryPart.Parent.Health.Value)).. "%]"
-		else
-		    self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
+		        else
+		            self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
                 end
             else
                 self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
@@ -409,3 +412,4 @@ end)
 
 
 return ESP
+
