@@ -239,6 +239,8 @@ function boxBase:Update()
                 elseif self.PrimaryPart.Parent:FindFirstChild("Health") then 
                     self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(math.round(self.PrimaryPart.Parent.Health.Value)).. "%]"
                 end
+            else
+                self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
             end
             self.Components.Distance.Color = Color3.fromRGB(255,255,255)
         else
