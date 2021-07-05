@@ -272,7 +272,7 @@ function boxBase:Update()
             if part:IsA("BasePart") and part ~= self.PrimaryPart then
                 local a = part:FindFirstChild("BoxHandleAdornment") or Instance.new("BoxHandleAdornment", part)
                 a.Adornee = part; a.AlwaysOnTop = true; a.ZIndex = 10; a.Size = part.Size; a.Color = BrickColor.new(color)
-                a.Transparency = ESP.Chams and 0.5 or 1;
+                a.Transparency = (ESP.Chams and ESP.Enabled) and 0.5 or 1;
             end
         end
     end
