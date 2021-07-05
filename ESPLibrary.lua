@@ -81,6 +81,12 @@ function ESP:Toggle(bool)
     self.Enabled = bool
     if not bool then
         for i,v in pairs(self.Objects) do
+            for i,part in pairs(v.PrimaryPart.Parent:GetChildren()) do
+                if part:IsA("BasePart") then
+                    local a = part:FindFirstChild("BoxHandleAdornment")
+                    if a then a:Destroy() end
+                end
+            end
             if v.Type == "Box" then --fov circle etc
                 if v.Temporary then
                     v:Remove()
