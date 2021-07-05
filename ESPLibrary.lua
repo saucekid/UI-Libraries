@@ -15,7 +15,7 @@ local ESP = {
     Health = true,
     PrimaryPart = "HumanoidRootPart",
     
-    PlayerList = {}
+    CharacterList = {},
     Objects = setmetatable({}, {__mode="kv"}),
     Overrides = {}
 }
@@ -266,6 +266,14 @@ function boxBase:Update()
     else
         self.Components.Tracer.Visible = false
     end
+    
+    for i,part in pairs(self.PrimaryPart.Parent:GetChildren()) do
+        if part:IsA("BasePart") and part ~= self.PrimaryPart then
+            local a = part:FindFirstChild("BoxHandleAdornment") or Instance.new("BoxHandleAdornment", part)
+            a.Adornee = part; a.AlwaysOnTop = true; a.ZIndex = 10; a.Size = part.Size; a.Color = BrickColor.new(color)
+            a.Transparency = ESP.Chams and 0.5 or 1;
+        end
+    end
 end
 
 function ESP:Add(obj, options)
@@ -348,10 +356,13 @@ end
 
 local function CharAdded(char)
     local p = plrs:GetPlayerFromCharacter(char)
+    game:GetService("RunService").Stepped:Wait()
+    
     if not char:FindFirstChild("HumanoidRootPart") then
         local ev
         ev = char.ChildAdded:Connect(function(c)
             if c.Name == "HumanoidRootPart" then
+                table.insert(ESP.CharacterList, char)
                 ev:Disconnect()
                 ESP:Add(char, {
                     Name = p.Name,
@@ -361,6 +372,7 @@ local function CharAdded(char)
             end
         end)
     else
+        table.insert(ESP.CharacterList, char)
         ESP:Add(char, {
             Name = p.Name,
             Player = p,
