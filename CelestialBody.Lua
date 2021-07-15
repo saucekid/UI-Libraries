@@ -1,50 +1,73 @@
---[[
+local TWEEN = game:GetService("TweenService")
+local RUNSERVICE = game:GetService("RunService")
+local STEP = RUNSERVICE:IsClient() and RUNSERVICE.RenderStepped or RUNSERVICE.Heartbeat
 
-This module returns a class that allows you to set and get information about the lighting celestial bodies more easily in 
-addition to transition between different lighting states fluidly
+local CelestialTween = {}
+CelestialTween.__index = CelestialTween
 
-API:
+function CelestialTween.new(origin, finish, tInfo)
+	local self = setmetatable({}, CelestialTween)
+	
+	self._Origin = origin:Clone()
+	self._Finish = finish:Clone()
+	
+	self._Start = self._Origin
+	self._Result = self._Origin
+	
+	self._ActiveStep = nil
+	
+	self._nValue = Instance.new("NumberValue")
+	self._tween = TWEEN:Create(self._nValue, tInfo, {Value = 1})
+	
+	self._tween.Completed:Connect(function()
+		self:_Disconnect()
+	end)
+		
+	self.TweenInfo = tInfo
+	self.Completed = self._tween.Completed
+	
+	return self
+end
 
-Static Functions:
-	CelestialBody.Tween(bodyA, bodyB, tweenInfo)
-		> Returns a pseudo tween object should behave identically to what TweenService:Create returns
-	CelestialBody.ToTimeOfDay(Number clockTime)
-		> Provide a clock time and the function will return the equivalent TimeOfDay String
-	CelestialBody.ToClockTime(String timeOfDay)
-		> Provide a time of day string and the function will return the equivalent ClockTime Number
+function CelestialTween:_Disconnect()
+	if (self._ActiveStep) then
+		self._ActiveStep:Disconnect()
+	end
+	self._ActiveStep = nil
+end
 
-Constructors:
-	CelestialBody.new(String body, Number timeOfDay, Number geographicLatitude)
-		> Creates a CelestialBodyClass from the body ("Sun" or "Moon"), time of day, and the geographic latitude
-	CelestialBody.FromLighting(String body)
-		> Creates a CelestialBodyClass from the body ("Sun" or "Moon") and the current Lighting properties
-	CelestialBody.FromDirection(String body, Vector3 direction)
-		> Creates a CelestialBodyClass from the body ("Sun" or "Moon") and a direction
-		> For example you could do this to match current lighting as well:
-			> CelestialBody.FromDirection("Sun", game.Lighting:GetSunDirection())
+function CelestialTween:GetPlaybackState()
+	return self._tween.PlaybackState
+end
 
-Methods:
-	CelestialBody:SetAsLighting()
-		> Sets the CelestialBody properties to the actual lighting
-	CelestialBody:GetDirection()
-		> Returns the direction of the CelestialBody
-	CelestialBody:Lerp(CelestialBody cBody, Number alpha)
-		> Returns a new CelestialBody which represents the interpolated information between CelestialBody and cBody by amount alpha
-	CelestialBody:Clone()
-		> Returns a duplicate of the current CelestialBody
+function CelestialTween:Pause()
+	self._tween:Pause()
+	self:_Disconnect()
+end
 
-Properties:
-	CelestialBody.Body
-		> Either the "Sun" or the "Moon"
-	CelestialBody.TimeOfDay
-		> The time of day string representing the CelestialBody
-	CelestialBody.GeographicLatitude
-		> The geographic latitude representing the CelestialBody
+function CelestialTween:Cancel()
+	self._tween:Cancel()
+	self._Start = self._Result
+	self:_Disconnect()
+end
 
-Enjoy!
-- EgoMoose
+function CelestialTween:Play()
+	self:_Disconnect()
+	self._ActiveStep = STEP:Connect(function(dt)
+		self._Result = self._Start:Lerp(self._Finish, self._nValue.Value)
+		self._Result:SetAsLighting()
+	end)
+	self._tween:Play()
+end
 
---]]
+function CelestialTween:Destroy()
+	self:Cancel()
+	self._nValue:Destroy()
+	self._tween:Destroy()
+	self.Completed = nil
+end
+
+--
 
 local LIGHTING = game:GetService("Lighting")
 
@@ -73,7 +96,7 @@ CelestialBody.__index = CelestialBody
 
 -- Public Static Functions
 
-CelestialBody.Tween = loadstring(game:HttpGet("https://gist.githubusercontent.com/saucekid/b11c457963077494df55c877c43b5a33/raw/53267d7563654e785fafaeb767bb6b157b6dd444/Nt2My3Od8h.txt"))
+CelestialBody.Tween = CelestialTween.new
 
 function CelestialBody.ToTimeOfDay(clockTime)
 	local hour, minFrac = math.modf(clockTime)
@@ -163,7 +186,5 @@ function CelestialBody:Clone()
 		self.GeographicLatitude
 	)
 end
-
---
 
 return CelestialBody
