@@ -1,4 +1,3 @@
---MADE BY IRIS
 local NotificationTable = {};
 local Done = true;
 local TweenService = game:GetService("TweenService");
