@@ -2,9 +2,10 @@
 local ESP = {
     Enabled = false,
     Boxes = true,
-    BoxShift = CFrame.new(0,-1.5,0),
+    Chams = true,
+    BoxShift = CFrame.new(0,0,0),
 	BoxSize = Vector3.new(4,6,0),
-    Color = Color3.fromRGB(255, 170, 0),
+    Color = Color3.fromRGB(255, 255, 255),
     FaceCamera = false,
     Names = true,
     TeamColor = true,
@@ -30,6 +31,7 @@ local mouse = plr:GetMouse()
 local V3new = Vector3.new
 local WorldToViewportPoint = cam.WorldToViewportPoint
 
+local Highlight = loadstring(game:HttpGet("https://raw.githubusercontent.com/ovicular/Highlight/main/Main.lua"))()
 --Functions--
 local function Draw(obj, props)
 	local new = Drawing.new(obj)
@@ -145,9 +147,13 @@ boxBase.__index = boxBase
 function boxBase:Remove()
     ESP.Objects[self.Object] = nil
     for i,v in pairs(self.Components) do
-        v.Visible = false
-        v:Remove()
-        self.Components[i] = nil
+        if i == "Chams" then
+            v:Destroy()
+        else
+            v.Visible = false
+            v:Remove()
+            self.Components[i] = nil
+        end
     end
 end
 
@@ -228,9 +234,19 @@ function boxBase:Update()
     else
         self.Components.Quad.Visible = false
     end
-
+    
+    if ESP.Chams then
+        self.Components.Chams.Enabled = true
+        self.Components.Chams:Edit({
+            FillColor = color,
+	        OutlineColor = color,
+        })
+    else
+        self.Components.Chams.Enabled = false
+    end
+    
     if ESP.Names then
-        local TagPos, Vis5 = WorldToViewportPoint(cam, locs.TagPos.p)
+        local TagPos, Vis5 = WorldToViewportPoint(cam, Vector3.new(locs.TagPos.p.x,locs.TagPos.p.y + 2,locs.TagPos.p.z))
         
         if Vis5 then
             self.Components.Name.Visible = true
@@ -242,7 +258,13 @@ function boxBase:Update()
             self.Components.Distance.Visible = true
             self.Components.Distance.Font = ESP.Font
             self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 14)
+            
             if ESP.Health then
+                local Health = self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").Health
+                local MaxHealth = self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").MaxHealth
+                
+                self.Components.Distance.Color = Color3.fromRGB(255 - 255 / (MaxHealth / Health), 255 / (MaxHealth / Health), 0)
+                
                 if self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid") then 
                     self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(math.round(self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").Health)).. "%]"
                 elseif self.PrimaryPart.Parent:FindFirstChild("Health") then 
@@ -252,8 +274,8 @@ function boxBase:Update()
                 end
             else
                 self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
+                self.Components.Distance.Color = Color3.fromRGB(255,255,255)
             end
-            self.Components.Distance.Color = Color3.fromRGB(255,255,255)
         else
             self.Components.Name.Visible = false
             self.Components.Distance.Visible = false
@@ -276,20 +298,6 @@ function boxBase:Update()
         end
     else
         self.Components.Tracer.Visible = false
-    end
-    
-    if game.PlaceId ~= 2317712696 then
-        for i,part in pairs(self.PrimaryPart.Parent:GetChildren()) do
-            if part:IsA("BasePart") and part ~= self.PrimaryPart then
-                local a = part:FindFirstChild("BoxHandleAdornment") or Instance.new("BoxHandleAdornment", part)
-                a.Adornee = part; a.AlwaysOnTop = true; a.ZIndex = 10; a.Size = part.Size; a.Color = BrickColor.new(color)
-                if (ESP.Chams and ESP.Enabled) then
-                    a.Transparency = 0.5 
-                else
-                    a.Transparency = 1
-                end
-            end
-        end
     end
 end
 
@@ -316,6 +324,12 @@ function ESP:Add(obj, options)
     if self:GetBox(obj) then
         self:GetBox(obj):Remove()
     end
+    
+    box.Components["Chams"] = Highlight.create(obj, {
+        Enabled = self.Enabled and self.Chams,
+	    FillColor = color,
+	    OutlineColor = color,
+    })
 
     box.Components["Quad"] = Draw("Quad", {
         Thickness = self.Thickness,
@@ -365,7 +379,7 @@ function ESP:Add(obj, options)
             if ESP.AutoRemove ~= false then
                 box:Remove()
             end
-	end)
+	    end)
     end
 
     return box
