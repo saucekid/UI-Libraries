@@ -1,7 +1,7 @@
 --Settings--
 local ESP = {
     Enabled = false,
-    Boxes = true,
+    Boxes = false,
     Chams = true,
     BoxShift = CFrame.new(0,0,0),
 	BoxSize = Vector3.new(4,6,0),
@@ -9,7 +9,7 @@ local ESP = {
     FaceCamera = false,
     Names = true,
     TeamColor = true,
-    Thickness = 2,
+    Thickness = 1,
     Font = 3,
     AttachShift = 1,
     TeamMates = true,
@@ -30,9 +30,23 @@ local mouse = plr:GetMouse()
 
 local V3new = Vector3.new
 local WorldToViewportPoint = cam.WorldToViewportPoint
+local GBB = workspace.GetBoundingBox
 
 local Highlight = loadstring(game:HttpGet("https://raw.githubusercontent.com/ovicular/Highlight/main/Main.lua"))()
 --Functions--
+local function round(num, bracket) 
+		if typeof(num) == "Vector2" then
+			return Vector2.new(round(num.X), round(num.Y))
+		elseif typeof(num) == "Vector3" then
+			return Vector3.new(round(num.X), round(num.Y), round(num.Z))
+		elseif typeof(num) == "Color3" then
+			return round(num.r * 255), round(num.g * 255), round(num.b * 255)
+		else
+			return num - num % (bracket or 1);
+		end
+	end
+
+
 local function Draw(obj, props)
 	local new = Drawing.new(obj)
 	
@@ -219,7 +233,7 @@ function boxBase:Update()
         local BottomLeft, Vis3 = WorldToViewportPoint(cam, locs.BottomLeft.p)
         local BottomRight, Vis4 = WorldToViewportPoint(cam, locs.BottomRight.p)
 
-        if self.Components.Quad then
+        if self.Components.Quad and self.Components.QuadOutline then
             if Vis1 or Vis2 or Vis3 or Vis4 then
                 self.Components.Quad.Visible = true
                 self.Components.Quad.PointA = Vector2.new(TopRight.X, TopRight.Y)
@@ -227,8 +241,16 @@ function boxBase:Update()
                 self.Components.Quad.PointC = Vector2.new(BottomLeft.X, BottomLeft.Y)
                 self.Components.Quad.PointD = Vector2.new(BottomRight.X, BottomRight.Y)
                 self.Components.Quad.Color = color
+                
+                self.Components.QuadOutline.Visible = true
+                self.Components.QuadOutline.PointA = Vector2.new(TopRight.X, TopRight.Y)
+                self.Components.QuadOutline.PointB = Vector2.new(TopLeft.X, TopLeft.Y)
+                self.Components.QuadOutline.PointC = Vector2.new(BottomLeft.X, BottomLeft.Y)
+                self.Components.QuadOutline.PointD = Vector2.new(BottomRight.X, BottomRight.Y)
+                self.Components.QuadOutline.Color = Color3.new(0,0,0)
             else
                 self.Components.Quad.Visible = false
+                self.Components.QuadOutline.Visible = false
             end
         end
     else
@@ -239,50 +261,72 @@ function boxBase:Update()
         self.Components.Chams.Enabled = true
         self.Components.Chams:Edit({
             FillColor = color,
-	        OutlineColor = color,
+	        OutlineColor = Color3.new(0,0,0),
+	        Adornee = self.Object
         })
     else
         self.Components.Chams.Enabled = false
     end
     
+    local Pos, Size = GBB(self.Object)
+    local ScreenPosition, OnScreen = WorldToViewportPoint(cam, self.PrimaryPart.Position)
+        
+    local Height = (cam.CFrame - cam.CFrame.p) * Vector3.new(0, (math.clamp(Size.Y, 1, 10) + 0.5) / 2, 0)
+	Height = math.abs(WorldToViewportPoint(cam, Pos.Position + Height).Y - WorldToViewportPoint(cam, Pos.Position - Height).Y)
+	Size = round(Vector2.new(Height / 2, Height))
+	local Position = round(Vector2.new(ScreenPosition.X, ScreenPosition.Y) - (Size / 2))
+
+	
     if ESP.Names then
         local TagPos, Vis5 = WorldToViewportPoint(cam, Vector3.new(locs.TagPos.p.x,locs.TagPos.p.y + 2,locs.TagPos.p.z))
         
+        if self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid") then
+            self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+        end
+        
         if Vis5 then
             self.Components.Name.Visible = true
-            self.Components.Name.Position = Vector2.new(TagPos.X, TagPos.Y)
+            self.Components.Name.Position = Position + Vector2.new(Size.X / 2, -self.Components.Name.TextBounds.Y - 1)
             self.Components.Name.Text = self.Name
             self.Components.Name.Font = ESP.Font
             self.Components.Name.Color = color
             
             self.Components.Distance.Visible = true
             self.Components.Distance.Font = ESP.Font
-            self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 14)
-            
+            self.Components.Distance.Position = Position + Vector2.new(Size.X / 2, Size.Y + 3)--Vector2.new(TagPos.X, TagPos.Y + 14)
+            self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
+            self.Components.Distance.Color = Color3.fromRGB(255,255,255)
+                
             if ESP.Health then
                 local Health = self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").Health
                 local MaxHealth = self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").MaxHealth
                 
-                self.Components.Distance.Color = Color3.fromRGB(255 - 255 / (MaxHealth / Health), 255 / (MaxHealth / Health), 0)
+                self.Components.Health.Visible = true
+                self.Components.Health.Color = Color3.fromRGB(255 - 255 / (MaxHealth / Health), 255 / (MaxHealth / Health), 0)
+                self.Components.Health.Font = ESP.Font
+                self.Components.Health.Position = Position + Vector2.new(Size.X / 2, -self.Components.Health.TextBounds.Y - 10)--Vector2.new(TagPos.X, TagPos.Y + 14)
                 
                 if self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid") then 
-                    self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(math.round(self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").Health)).. "%]"
-                elseif self.PrimaryPart.Parent:FindFirstChild("Health") then 
-                    self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]".. "[".. tostring(math.round(self.PrimaryPart.Parent.Health.Value)).. "%]"
-		        else
-		            self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
+                    self.Components.Health.Text = "[".. tostring(math.round(Health)).. "%]"
+                else
+                    self.Components.Health.Visible = false   
                 end
             else
-                self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
-                self.Components.Distance.Color = Color3.fromRGB(255,255,255)
+                self.Components.Health.Visible = false
             end
         else
             self.Components.Name.Visible = false
             self.Components.Distance.Visible = false
+            self.Components.Health.Visible = false
         end
     else
+        if self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid") then
+            self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").DisplayDistanceType = Enum.HumanoidDisplayDistanceType.Viewer
+        end
+    
         self.Components.Name.Visible = false
         self.Components.Distance.Visible = false
+        self.Components.Health.Visible = false
     end
     
     if ESP.Tracers then
@@ -325,10 +369,19 @@ function ESP:Add(obj, options)
         self:GetBox(obj):Remove()
     end
     
-    box.Components["Chams"] = Highlight.create(obj, {
+    box.Components["Chams"] = Highlight.create(workspace, {
+        Adornee = obj,
         Enabled = self.Enabled and self.Chams,
 	    FillColor = color,
-	    OutlineColor = color,
+	    OutlineColor = Color3.new(0,0,0),
+    })
+
+    box.Components["QuadOutline"] = Draw("Quad", {
+        Thickness = self.Thickness + 3,
+        Color = color,
+        Transparency = 1,
+        Filled = false,
+        Visible = self.Enabled and self.Boxes
     })
 
     box.Components["Quad"] = Draw("Quad", {
@@ -338,19 +391,30 @@ function ESP:Add(obj, options)
         Filled = false,
         Visible = self.Enabled and self.Boxes
     })
+
+
     box.Components["Name"] = Draw("Text", {
 		Text = box.Name,
 		Color = box.Color,
 		Center = true,
 		Outline = true,
-        Size = 19,
+        Size = 15,
         Visible = self.Enabled and self.Names
 	})
+	
 	box.Components["Distance"] = Draw("Text", {
 		Color = box.Color,
 		Center = true,
 		Outline = true,
-        Size = 19,
+        Size = 15,
+        Visible = self.Enabled and self.Names
+	})
+	
+	box.Components["Health"] = Draw("Text", {
+		Color = box.Color,
+		Center = true,
+		Outline = true,
+        Size = 15,
         Visible = self.Enabled and self.Names
 	})
 	
@@ -360,6 +424,7 @@ function ESP:Add(obj, options)
         Transparency = 1,
         Visible = self.Enabled and self.Tracers
     })
+
     self.Objects[obj] = box
     
     obj.AncestryChanged:Connect(function(_, parent)
