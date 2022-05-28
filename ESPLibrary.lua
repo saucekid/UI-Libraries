@@ -108,7 +108,13 @@ function ESP:Toggle(bool)
                     v:Remove()
                 else
                     for i,v in pairs(v.Components) do
-                        v.Visible = false
+                        if i == "Chams" then
+                            v:Edit({
+		                        Enabled = false,
+                            })
+                        else
+                            v.Visible = false
+                        end
                     end
                 end
             end
@@ -203,7 +209,13 @@ function boxBase:Update()
 
     if not allow then
         for i,v in pairs(self.Components) do
-            v.Visible = false
+            if i == "Chams" then
+                v:Edit({
+		            Enabled = false,
+                })
+            else
+                v.Visible = false
+            end
         end
         return
     end
@@ -259,17 +271,14 @@ function boxBase:Update()
     
     if ESP.Chams then
         self.Components.Chams:Edit({
-		Enabled = true,
+		    Enabled = true,
             FillColor = color,
 	        OutlineColor = Color3.new(0,0,0),
 	        Adornee = self.Object
         })
     else
         self.Components.Chams:Edit({
-		Enabled = false,
-            FillColor = color,
-	        OutlineColor = Color3.new(0,0,0),
-	        Adornee = self.Object
+		    Enabled = false,
         })
     end
     
