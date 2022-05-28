@@ -258,14 +258,19 @@ function boxBase:Update()
     end
     
     if ESP.Chams then
-        self.Components.Chams.Enabled = true
         self.Components.Chams:Edit({
+		Enabled = true,
             FillColor = color,
 	        OutlineColor = Color3.new(0,0,0),
 	        Adornee = self.Object
         })
     else
-        self.Components.Chams.Enabled = false
+        self.Components.Chams:Edit({
+		Enabled = false,
+            FillColor = color,
+	        OutlineColor = Color3.new(0,0,0),
+	        Adornee = self.Object
+        })
     end
     
     local Pos, Size = GBB(self.Object)
