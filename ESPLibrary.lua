@@ -369,7 +369,7 @@ function ESP:Add(obj, options)
         self:GetBox(obj):Remove()
     end
     
-    box.Components["Chams"] = Highlight.create(workspace, {
+    box.Components["Chams"] = Highlight.create(workspace.Terrain, {
         Adornee = obj,
         Enabled = self.Enabled and self.Chams,
 	    FillColor = color,
