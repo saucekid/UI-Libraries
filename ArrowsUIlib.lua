@@ -32,6 +32,7 @@ end
 local function NewText(position, color, text, text_size)
     local t = drawing("Text")
     t.Position = position
+    t.Outline = true
     t.Size = text_size
     t.Text = text
     t.Font = 3
