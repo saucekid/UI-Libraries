@@ -554,6 +554,8 @@ function Library:NewCategory(cat_name, color)
             ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Toggle"}),
             ["CallBack"] = CallBack
         }
+       CallBack(default)
+
         Library:Reset()
     end
 
