@@ -16,7 +16,17 @@ local abs = math.abs
 local random = math.random
 local floor = math.floor
 
+
+     
+
 --START
+local function getTextBounds(t)
+    local message = t.Text
+    local size = t.Size
+    local bounds = game.TextService:GetTextSize(message, size, "Code", Vector2.new(size*#t.Text, size))
+    return bounds
+end
+
 local function NewSquare(position, color, transparency)
     local b = drawing("Square")
     b.Position = position
@@ -48,7 +58,7 @@ local function CreateTextBox(text, back_color, back_transparency, text_color, te
     local t = NewText(v2(0, 0), text_color, text, text_size)
 
     local margin = 2
-    b.Size = v2(t.TextBounds.X+margin*4, t.TextBounds.Y+margin*2)
+    b.Size = v2(getTextBounds(t).X+margin*4, getTextBounds(t).Y+margin*2)
     t.Position = v2(pos.X+margin*2, pos.Y+margin)
 
     if info.Type == "Toggle" then
@@ -57,7 +67,7 @@ local function CreateTextBox(text, back_color, back_transparency, text_color, te
         local b2 = NewSquare(newpos, back_color, back_transparency)
         local t2 = NewText(v2(0, 0), RGB(255, 255, 255), "<off>", text_size)
 
-        b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
+        b2.Size = v2(getTextBounds(t2).X+margin*4, getTextBounds(t2).Y+margin*2)
         t2.Position = v2(newpos.X+margin, newpos.Y+margin)
 
         return {["Main"] = b, ["Text"] = t, ["Extra"] = {["Main"] = b2, ["Text"] = t2}}
@@ -68,8 +78,8 @@ local function CreateTextBox(text, back_color, back_transparency, text_color, te
         local t2 = NewText(v2(0, 0), RGB(255, 255, 255), "< 0"..info.Suffix.." >", text_size)
         t2.Center = true
 
-        b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
-        t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+        b2.Size = v2(getTextBounds(t2).X+margin*4, getTextBounds(t2).Y+margin*2)
+        t2.Position = v2(newpos.X+margin+getTextBounds(t2).X/2, newpos.Y+margin)
 
         return {["Main"] = b, ["Text"] = t, ["Extra"] = {["Main"] = b2, ["Text"] = t2}}
     elseif info.Type == "Dropdown" then
@@ -79,8 +89,8 @@ local function CreateTextBox(text, back_color, back_transparency, text_color, te
         local t2 = NewText(v2(0, 0), RGB(255, 255, 255), "testtext", text_size)
         t2.Center = true
 
-        b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
-        t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+        b2.Size = v2(getTextBounds(t2).X+margin*4, getTextBounds(t2).Y+margin*2)
+        t2.Position = v2(newpos.X+margin+getTextBounds(t2).X/2, newpos.Y+margin)
 
         return {["Main"] = b, ["Text"] = t, ["Extra"] = {["Main"] = b2, ["Text"] = t2}}
     elseif info.Type == "Colorpicker" then
@@ -94,8 +104,8 @@ local function CreateTextBox(text, back_color, back_transparency, text_color, te
 
         t2.Center = true
 
-        b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
-        t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+        b2.Size = v2(getTextBounds(t2).X+margin*4, getTextBounds(t2).Y+margin*2)
+        t2.Position = v2(newpos.X+margin+getTextBounds(t2).X/2, newpos.Y+margin)
 
         p2.Position = v2(t2.Position.X-p2.Size.X/2, b2.Position.Y+b2.Size.Y/2-p2.Size.Y/2)
 
@@ -243,7 +253,7 @@ function Library:PlaceUI()
             local margin = 2
 
             b.Position = pos
-            b.Size = v2(t.TextBounds.X+margin*4, t.TextBounds.Y+margin*2)
+            b.Size = v2(getTextBounds(t).X+margin*4, getTextBounds(t).Y+margin*2)
             t.Position = v2(pos.X+margin*2, pos.Y+margin)
 
             local newpos = v2(b.Position.X + b.Size.X, b.Position.Y)
@@ -263,8 +273,8 @@ function Library:PlaceUI()
             b2.Position = newpos
             t2.Center = true
 
-            b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
-            t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+            b2.Size = v2(getTextBounds(t2).X+margin*4, getTextBounds(t2).Y+margin*2)
+            t2.Position = v2(newpos.X+margin+getTextBounds(t2).X/2, newpos.Y+margin)
         elseif v["Type"] == "Category" then
             local pos = v2(_G["Theme"]["UI_Position"].X, current_y)
 
@@ -274,7 +284,7 @@ function Library:PlaceUI()
             local margin = 2
 
             b.Position = pos
-            b.Size = v2(t.TextBounds.X+margin*4, t.TextBounds.Y+margin*2)
+            b.Size = v2(getTextBounds(t).X+margin*4, getTextBounds(t).Y+margin*2)
             t.Position = v2(pos.X+margin*2, pos.Y+margin)
         elseif v["Type"] == "Label" or v["Type"] == "Button" then
             local pos = v2(_G["Theme"]["UI_Position"].X+10, current_y)
@@ -285,7 +295,7 @@ function Library:PlaceUI()
             local margin = 2
 
             b.Position = pos
-            b.Size = v2(t.TextBounds.X+margin*4, t.TextBounds.Y+margin*2)
+            b.Size = v2(getTextBounds(t).X+margin*4, getTextBounds(t).Y+margin*2)
             t.Position = v2(pos.X+margin*2, pos.Y+margin)
         elseif v["Type"] == "Colorpicker" then
             local pos = v2(_G["Theme"]["UI_Position"].X+10, current_y)
@@ -295,7 +305,7 @@ function Library:PlaceUI()
 
             local margin = 2
             b.Position = pos
-            b.Size = v2(t.TextBounds.X+margin*4, t.TextBounds.Y+margin*2)
+            b.Size = v2(getTextBounds(t).X+margin*4, getTextBounds(t).Y+margin*2)
             t.Position = v2(pos.X+margin*2, pos.Y+margin)
 
             local newpos = v2(b.Position.X + b.Size.X, b.Position.Y)
@@ -308,8 +318,8 @@ function Library:PlaceUI()
             t2.Center = true
 
             b2.Position = newpos
-            b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
-            t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+            b2.Size = v2(getTextBounds(t2).X+margin*4, getTextBounds(t2).Y+margin*2)
+            t2.Position = v2(newpos.X+margin+getTextBounds(t2).X/2, newpos.Y+margin)
 
             p2.Position = v2(t2.Position.X-p2.Size.X/2, b2.Position.Y+b2.Size.Y/2-p2.Size.Y/2)
         end
@@ -358,8 +368,8 @@ function Library:Reset()
                 local margin = 2
                 local b2 = v["Drawings"]["Extra"]["Main"]
                 local t2 = v["Drawings"]["Extra"]["Text"]
-                b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
-                t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+                b2.Size = v2(getTextBounds(t2).X+margin*4, getTextBounds(t2).Y+margin*2)
+                t2.Position = v2(newpos.X+margin+getTextBounds(t2).X/2, newpos.Y+margin)
             elseif v["Type"] == "Dropdown" then
                 local current = v["Selected"]
                 v["Drawings"]["Extra"]["Text"].Text = "<"..v["OPTIONS"][current]..">"
@@ -368,8 +378,8 @@ function Library:Reset()
                 local margin = 2
                 local b2 = v["Drawings"]["Extra"]["Main"]
                 local t2 = v["Drawings"]["Extra"]["Text"]
-                b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
-                t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+                b2.Size = v2(getTextBounds(t2).X+margin*4, getTextBounds(t2).Y+margin*2)
+                t2.Position = v2(newpos.X+margin+getTextBounds(t2).X/2, newpos.Y+margin)
             end
         else 
             if v["Type"] == "Toggle" then
@@ -385,8 +395,8 @@ function Library:Reset()
                 local margin = 2
                 local b2 = v["Drawings"]["Extra"]["Main"]
                 local t2 = v["Drawings"]["Extra"]["Text"]
-                b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
-                t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+                b2.Size = v2(getTextBounds(t2).X+margin*4, getTextBounds(t2).Y+margin*2)
+                t2.Position = v2(newpos.X+margin+getTextBounds(t2).X/2, newpos.Y+margin)
             elseif v["Type"] == "Dropdown" then
                 local current = v["Selected"]
                 v["Drawings"]["Extra"]["Text"].Text = "<"..v["OPTIONS"][current]..">"
@@ -395,8 +405,8 @@ function Library:Reset()
                 local margin = 2
                 local b2 = v["Drawings"]["Extra"]["Main"]
                 local t2 = v["Drawings"]["Extra"]["Text"]
-                b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
-                t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+                b2.Size = v2(getTextBounds(t2).X+margin*4, getTextBounds(t2).Y+margin*2)
+                t2.Position = v2(newpos.X+margin+getTextBounds(t2).X/2, newpos.Y+margin)
             end
         end
     end
@@ -631,4 +641,7 @@ function Library:Kill()
     DESTROY_GUI = true
     _G["Layout"] = {}
 end
+
+
+
 return Library
