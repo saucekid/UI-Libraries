@@ -901,7 +901,8 @@ do
         end
 
         panel.seperators[panel.currentSeperator][text] = setToggled
-
+        
+        callback(data.checked)
         return {
             colorpicker = colorpickerReturn,
             setToggled = setToggled,
