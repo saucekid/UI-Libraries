@@ -18,7 +18,7 @@ local player = players.LocalPlayer
 local mouse = player:GetMouse()
 local camera = game.Workspace.CurrentCamera
 
-library.theme = {
+library.theme = theme or {
     fontsize = 15,
     titlesize = 18,
     font = Enum.Font.Code,
