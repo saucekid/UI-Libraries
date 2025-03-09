@@ -908,12 +908,13 @@ function library:CreateWindow(name, size, hidebutton)
                 end
                 toggle:Set(toggle.default)
 
-                function toggle:AddKeybind(default, flag)
+                function toggle:AddKeybind(default, newkeycallback, flag)
                     local keybind = { }
 
                     keybind.default = default or "None"
                     keybind.value = keybind.default
                     keybind.flag = flag or ( (toggle.text or "") .. tostring(#toggle.Items:GetChildren()))
+		    keybind.newkeycallback = newkeycallback or function(key) end
 
                     local shorter_keycodes = {
                         ["LeftShift"] = "LSHIFT",
@@ -961,12 +962,14 @@ function library:CreateWindow(name, size, hidebutton)
                             if keybind.flag and keybind.flag ~= "" then
                                 library.flags[keybind.flag] = key
                             end
+			    pcall(keybind.newkeycallback, value)		
                         end
                         keybind.Main.Text = "[" .. (shorter_keycodes[key.Name] or key.Name) .. "]"
                         keybind.value = key
                         if keybind.flag and keybind.flag ~= "" then
                             library.flags[keybind.flag] = keybind.value
                         end
+			pcall(keybind.newkeycallback, value)			
                     end
 
                     function keybind:Get()
