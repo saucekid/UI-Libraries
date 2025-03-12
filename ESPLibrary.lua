@@ -281,7 +281,7 @@ function boxBase:Update()
             self.Components.Distance.Text = "[".. math.floor((cam.CFrame.p - cf.p).magnitude).. "m]"
             self.Components.Distance.Color = Color3.fromRGB(255,255,255)
                 
-            if ESP.Health then
+            if ESP.Health and self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid") then
                 local Health = self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").Health
                 local MaxHealth = self.PrimaryPart.Parent:FindFirstChildOfClass("Humanoid").MaxHealth
                 
