@@ -79,7 +79,7 @@ function ESP:GetColor(obj)
 		return ov(obj)
     end
     local p = self:GetPlrFromChar(obj)
-	return p and self.TeamColor and p.TeamColor or self.Color
+	return p and self.TeamColor and p.TeamColor.Color or self.Color
 end
 
 function ESP:GetPlrFromChar(char)
