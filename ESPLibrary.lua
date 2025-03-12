@@ -2,7 +2,6 @@
 local ESP = {
     Enabled = false,
     Boxes = false,
-    Chams = true,
     BoxShift = CFrame.new(0,0,0),
 	BoxSize = Vector3.new(4,6,0),
     Color = Color3.fromRGB(255, 255, 255),
@@ -32,7 +31,6 @@ local V3new = Vector3.new
 local WorldToViewportPoint = cam.WorldToViewportPoint
 local GBB = workspace.GetBoundingBox
 
-local Highlight = loadstring(game:HttpGet("https://raw.githubusercontent.com/ovicular/Highlight/main/Main.lua"))()
 --Functions--
 local function round(num, bracket) 
 		if typeof(num) == "Vector2" then
@@ -81,7 +79,7 @@ function ESP:GetColor(obj)
 		return ov(obj)
     end
     local p = self:GetPlrFromChar(obj)
-	return p and self.TeamColor and p.Team and p.Team.TeamColor.Color or self.Color
+	return p and self.TeamColor and p.TeamColor or self.Color
 end
 
 function ESP:GetPlrFromChar(char)
@@ -108,13 +106,7 @@ function ESP:Toggle(bool)
                     v:Remove()
                 else
                     for i,v in pairs(v.Components) do
-                        if i == "Chams" then
-                            v:Edit({
-		                        Enabled = false,
-                            })
-                        else
-                            v.Visible = false
-                        end
+                        v.Visible = false
                     end
                 end
             end
@@ -167,13 +159,9 @@ boxBase.__index = boxBase
 function boxBase:Remove()
     ESP.Objects[self.Object] = nil
     for i,v in pairs(self.Components) do
-        if i == "Chams" then
-            v:Destroy()
-        else
-            v.Visible = false
-            v:Remove()
-            self.Components[i] = nil
-        end
+		v.Visible = false
+		v:Remove()
+		self.Components[i] = nil
     end
 end
 
@@ -209,13 +197,7 @@ function boxBase:Update()
 
     if not allow then
         for i,v in pairs(self.Components) do
-            if i == "Chams" then
-                v:Edit({
-		            Enabled = false,
-                })
-            else
-                v.Visible = false
-            end
+            v.Visible = false
         end
         return
     end
@@ -269,18 +251,6 @@ function boxBase:Update()
         self.Components.Quad.Visible = false
     end
     
-    if ESP.Chams then
-        self.Components.Chams:Edit({
-		    Enabled = true,
-            FillColor = color,
-	        OutlineColor = Color3.new(0,0,0),
-	        Adornee = self.Object
-        })
-    else
-        self.Components.Chams:Edit({
-		    Enabled = false,
-        })
-    end
     
     local Pos, Size = GBB(self.Object)
     local ScreenPosition, OnScreen = WorldToViewportPoint(cam, self.PrimaryPart.Position)
@@ -383,12 +353,6 @@ function ESP:Add(obj, options)
         self:GetBox(obj):Remove()
     end
     
-    box.Components["Chams"] = Highlight.create(workspace.Terrain, {
-        Adornee = obj,
-        Enabled = self.Enabled and self.Chams,
-	    FillColor = color,
-	    OutlineColor = Color3.new(0,0,0),
-    })
 
     box.Components["QuadOutline"] = Draw("Quad", {
         Thickness = self.Thickness + 3,
@@ -515,4 +479,3 @@ end)
 
 
 return ESP
-
